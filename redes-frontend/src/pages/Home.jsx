@@ -1,4 +1,3 @@
-import React from 'react';
 import  { FaHome } from 'react-icons/fa'; // Asegúrate de reemplazar con la ruta correcta a tu icono
 
 function Home() {

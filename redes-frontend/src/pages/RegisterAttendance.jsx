@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 import React from "react";
 import { useState } from "react";
 import { useRef } from "react";
@@ -5,6 +7,10 @@ import Webcam from "react-webcam";
 import QRCode from "qrcode.react";
 import { FaCamera } from "react-icons/fa";
 import { useEffect } from "react";
+import User from '../UserRegistry.json'
+import Web3 from 'web3';
+import Event from '../ConferenceRegistry.json'
+
 
 function RegisterAttendance() {
   const [attendeeData, setAttendeeData] = useState({
@@ -13,7 +19,9 @@ function RegisterAttendance() {
     address: "",
     position: "",
     event: "",
-  });
+  }); 
+  const [web3, setWeb3] = useState(null);
+  const [contract, setContract] = useState(null);
   const [events, setEvents] = useState([]);
   const [showWebcam, setShowWebcam] = useState(false);
   const [qrCode, setQRCode] = useState("");
@@ -37,6 +45,51 @@ function RegisterAttendance() {
   useEffect(() => {
     fetchEvents();
   }, []); 
+
+  useEffect(() => {
+    // Función para inicializar Web3 y el contrato
+    const initWeb3 = async () => {
+      try {
+        // Detectar si MetaMask está instalado
+        if (window.ethereum) {
+          const web3Instance = new Web3(window.ethereum);
+          await window.ethereum.request({ method: "eth_requestAccounts" });
+          setWeb3(web3Instance);
+
+          // Reemplaza 'ContractAddress' con la dirección de tu contrato
+          const contractAddress = "0x1A0b12FFA24729C30F4D0939c730ceBD7Ad0CcDf";
+          const contractInstance = new web3Instance.eth.Contract(
+            Event.output.abi, 
+            contractAddress
+          );
+
+          setContract(contractInstance);
+        } else {
+          console.error("MetaMask no está instalado");
+        }
+      } catch (error) {
+        console.error("Error al inicializar Web3:", error);
+      }
+    };
+
+    initWeb3();
+  }, []);
+
+  useEffect(() => {
+    // Función para cargar las conferencias desde el contrato
+    const loadConferences = async () => {
+      try {
+        if (contract) {
+          const conferences = await contract.methods.getAllConferences().call();
+          setEvents(conferences);
+        }
+      } catch (error) {
+        console.error("Error al cargar conferencias:", error);
+      }
+    };
+
+    loadConferences();
+  }, [contract]);
 
   /*
     const uploadAttendeeInformation = async (attendeeInformation) => {
@@ -69,9 +122,24 @@ function RegisterAttendance() {
   
   */
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Aquí manejarías el envío de los datos, como enviarlos a un backend
+    const web3 = new Web3(window.ethereum);
+
+    // Dirección del contrato y ABI 
+    const contractAddress = '0xf48ac7bed68b53d043cb3752b07d1ff3749e2efc';
+    const contractABI = User.output.abi;
+
+    // Crear una instancia del contrato
+    const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+    // Llamar al método registerUser en el contrato inteligente con los datos del asistente
+    await contract.methods.registerUser(
+      attendeeData.name,
+      attendeeData.email,
+      attendeeData.address,
+      attendeeData.position
+    ).send({ from: '0xBf7ce29bc294a6e189112aEA16B0bddd9b3B4b16' });
     console.log(attendeeData);
   };
 
@@ -96,8 +164,11 @@ function RegisterAttendance() {
   };
 
   // Esta función manejará la lógica de tomar una foto
-  const handleCaptureClick = () => {
+  const handleCaptureClick = async () => {
     capture();
+
+    
+
     // Combinar los datos del formulario con la imagen
     /*const attendeeInformation = {
     ...attendeeData, 
@@ -199,11 +270,11 @@ function RegisterAttendance() {
               value={attendeeData.event}
               onChange={handleChange}
             >
-              <option value="">Seleccione un evento</option>
-              {events.map((event) => (
-                <option key={event.id} value={event.id}>
-                  {event.name}
-                </option>
+               <option value="">Seleccione una conferencia</option>
+        {events.map((conference, index) => (
+          <option key={index} value={index}>
+            {conference.eventName} - {conference.eventLocation}
+          </option>
               ))}
             </select>
           </div>
@@ -221,6 +292,13 @@ function RegisterAttendance() {
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
             >
               Rec. facial
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            >
+              guardar
             </button>
           </div>
         </form>

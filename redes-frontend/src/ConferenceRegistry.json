@@ -1,0 +1,182 @@
+{
+	"compiler": {
+		"version": "0.8.22+commit.4fc1097e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "eventName",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "eventDate",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "eventLocation",
+						"type": "string"
+					}
+				],
+				"name": "ConferenceCreated",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "conferences",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "eventName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "eventDate",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "eventLocation",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_eventName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_eventDate",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_eventLocation",
+						"type": "string"
+					}
+				],
+				"name": "createConference",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllConferences",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "eventName",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "eventDate",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "eventLocation",
+								"type": "string"
+							}
+						],
+						"internalType": "struct ConferenceRegistry.Conference[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "getConference",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/ConferenceRegistry.sol": "ConferenceRegistry"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/ConferenceRegistry.sol": {
+			"keccak256": "0x9b09eb59a0b3490f19e14a2fa0549ca984f245dd4ed46fa183d26e418abfe047",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://be31b5270ce2b5458a80ccf9715a7d0490d1929616ce425fada49d0b80ec7f0d",
+				"dweb:/ipfs/QmWaWN9QUCXBtkF7RrKThjYfrcNCDpFcbwn9HKTwkVAAxf"
+			]
+		}
+	},
+	"version": 1
+}
