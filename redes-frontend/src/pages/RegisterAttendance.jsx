@@ -67,6 +67,7 @@ function RegisterAttendance() {
         } else {
           console.error("MetaMask no está instalado");
         }
+        
       } catch (error) {
         console.error("Error al inicializar Web3:", error);
       }
