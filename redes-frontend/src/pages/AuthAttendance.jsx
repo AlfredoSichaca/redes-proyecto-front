@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Web3 from 'web3';
 import Event from '../ConferenceRegistry.json'
+import QrReader from 'qrcode-reader';
+import QRCode from "qrcode.react";
+
+
 
 function Authenticate() {
   const [web3, setWeb3] = useState(null);
@@ -10,6 +13,10 @@ function Authenticate() {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState('');
   const [image, setImage] = useState(null);
+  const [qrD, setQrD] = useState([]);
+  const [file, setFile] = useState(null);
+
+
 
  
 
@@ -17,42 +24,23 @@ function Authenticate() {
     setSelectedEvent(e.target.value);
   };
 
-  const handleImageChange = (e) => {
-    if (e.target.files.length > 0) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setImage(reader.result);
-      };
-    }
-  };
-
-  const handleImageUpload = async () => {
-    try {
-      // Aquí agregarías la lógica para distinguir entre un QR o una imagen de rostro
-      const isQRCode = await checkIfQRCode(image); // Función ficticia, tendrías que implementarla
-      if (isQRCode) {
-        // Manejar QR code
-      } else {
-        // Manejar imagen de rostro
-      }
-
-      // Enviar la imagen al servidor
-      const formData = new FormData();
-      formData.append('image', image);
-      formData.append('event', selectedEvent);
-      const response = await axios.post('/api/upload-image', formData);
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
-  };
-
   const checkIfQRCode = (imageData) => {
-    // Lógica para verificar si la imagen es un código QR
-    // Esta función debe ser implementada según la lógica de detección de QR
+    return new Promise((resolve, reject) => {
+      const qr = new QrReader();
+      qr.callback = (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result ? result.result : null);
+        }
+      };
+      qr.decode(imageData);
+    });
   };
+
+ 
+
+ 
 
   useEffect(() => {
     // Función para inicializar Web3 y el contrato
@@ -64,7 +52,6 @@ function Authenticate() {
           await window.ethereum.request({ method: "eth_requestAccounts" });
           setWeb3(web3Instance);
 
-          // Reemplaza 'ContractAddress' con la dirección de tu contrato
           const contractAddress = "0xAdC4f8237596CaE04246b9bb8E6aFEb3E2490094";
           const contractInstance = new web3Instance.eth.Contract(
             Event.output.abi, 
@@ -99,6 +86,39 @@ function Authenticate() {
     loadConferences();
   }, [contract]);
 
+
+  const handleImageChange = (e) => {
+    if (e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setFile(file)
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = async () => {
+        setImage(reader.result);
+        try {
+          const qrResult = await checkIfQRCode(reader.result);
+          if (qrResult) {
+            console.log('QR Code data:', qrResult);
+            const datos=qrResult
+            const jsonResult=JSON.parse(datos)
+            setQrD(jsonResult)
+          } else {
+            console.log('No QR Code found');
+          }
+        } catch (error) {
+          console.error('Error processing QR Code:', error);
+        }
+      };
+    }
+  };
+  const handleVerification=(e)=>{
+    if(selectedEvent==qrD.event){
+      alert("Bienvenido")
+    }else{
+      alert("Informacion incorrecta")
+    }
+  }
+
   return (
     <div className="container mx-auto my-10">
       <div className="flex flex-col md:flex-row justify-center items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
@@ -122,23 +142,34 @@ function Authenticate() {
         </div>
 
         <div className="w-full md:w-1/2 bg-gray-200 p-4 rounded-md">
-          <p className="mb-4 text-sm text-gray-700">Adjunte una imagen del código QR o una imagen de su rostro.</p>
+          <p className="mb-4 text-sm text-gray-700">Adjunte una imagen del código QR.</p>
           <input
             type="file"
             onChange={handleImageChange}
             accept="image/*"
             className="mb-4"
           />
-          {image && (
-            <button
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleImageUpload}
-            >
-              Adjuntar imagen
-            </button>
+           <div className="w-full md:w-1/2 bg-gray-200 p-4 rounded-md">
+          {' '}
+          {file && file instanceof File &&  (
+            <img
+              src={URL.createObjectURL(file)}
+              width={250}
+              height={250}
+              alt={''}
+            />
+
           )}
+          </div>
         </div>
       </div>
+      <button
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button"
+            onClick={handleVerification}
+          >
+            Validar
+          </button>
     </div>
   );
 }
