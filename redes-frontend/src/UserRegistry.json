@@ -31,10 +31,56 @@
 						"internalType": "string",
 						"name": "position",
 						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "evento",
+						"type": "string"
 					}
 				],
 				"name": "UserRegistered",
 				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "getAllUsers",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "email",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "place",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "position",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "evento",
+								"type": "string"
+							}
+						],
+						"internalType": "struct UserRegistry.User[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			},
 			{
 				"inputs": [
@@ -46,6 +92,11 @@
 				],
 				"name": "getUser",
 				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					},
 					{
 						"internalType": "string",
 						"name": "",
@@ -104,6 +155,11 @@
 						"internalType": "string",
 						"name": "_position",
 						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_evento",
+						"type": "string"
 					}
 				],
 				"name": "registerUser",
@@ -140,6 +196,11 @@
 						"internalType": "string",
 						"name": "position",
 						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "evento",
+						"type": "string"
 					}
 				],
 				"stateMutability": "view",
@@ -174,11 +235,11 @@
 	},
 	"sources": {
 		"contracts/UserRegistry.sol": {
-			"keccak256": "0x8f2e8389ff205bd579c103054956babcaa8638a88ddfa934f53c0fc7391bb523",
+			"keccak256": "0xe5bef0617b0acf3487462d96f43badf09ae045ea9fbaf7bf4b2ccac4b02568cc",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://1b178d5f00426b99e9b9e83e0a7c9ffde806c6c816dae34eeee4c2b54979e9c3",
-				"dweb:/ipfs/QmQAzfH1WQEhDnrbRig8CLVK6f2VxGwnSSyTkyj9coErRg"
+				"bzz-raw://e307629a4171a779e2cae5e5fa3a9a6db7125cbc3527853f232df4cdf56c6083",
+				"dweb:/ipfs/QmTUaAGed1i37QV5cSaCQKwDW8WwNViV1wPwWBe8BYYGfL"
 			]
 		}
 	},

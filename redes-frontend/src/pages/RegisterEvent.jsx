@@ -23,7 +23,7 @@ function RegisterEvent() {
     const web3 = new Web3(window.ethereum);
 
     // Dirección del contrato y ABI 
-    const contractAddress = '0xAdC4f8237596CaE04246b9bb8E6aFEb3E2490094';
+    const contractAddress = '0x26fD98d34F86C88BA3D55A80fDc3C9334D57991E';
     const contractABI = Event.output.abi;
 
     // Crear una instancia del contrato

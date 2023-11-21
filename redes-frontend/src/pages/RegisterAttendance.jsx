@@ -36,9 +36,9 @@ useEffect(() => {
           await window.ethereum.request({ method: "eth_requestAccounts" });
           setWeb3(web3Instance);
 
-          const contractAddress = "0x1A0b12FFA24729C30F4D0939c730ceBD7Ad0CcDf";
+          const contractAddress = "0x26fD98d34F86C88BA3D55A80fDc3C9334D57991E";
           const contractInstance = new web3Instance.eth.Contract(
-            User.output.abi, 
+            Event.output.abi, 
             contractAddress
           );
           setContract(contractInstance);
@@ -72,14 +72,15 @@ useEffect(() => {
     e.preventDefault();
     const web3 = new Web3(window.ethereum);
 
-    const contractAddress = '0xf48ac7bed68b53d043cb3752b07d1ff3749e2efc';
+    const contractAddress = '0xF889000aa6988011FddeD38c466DD3F11a02Bb16';
     const contractABI = User.output.abi;
     const contract = new web3.eth.Contract(contractABI, contractAddress);
     await contract.methods.registerUser(
       attendeeData.name,
       attendeeData.email,
       attendeeData.address,
-      attendeeData.position
+      attendeeData.position,
+      attendeeData.event
     ).send({ from: '0xBf7ce29bc294a6e189112aEA16B0bddd9b3B4b16' });
     console.log(attendeeData);
   };
@@ -89,48 +90,48 @@ useEffect(() => {
     setQRCode(qrData);
   };
 
-  useEffect(() => {
-    // Función para inicializar Web3 y el contrato
-    const initWeb3 = async () => {
-      try {
-        // Detectar si MetaMask está instalado
-        if (window.ethereum) {
-          const web3Instance = new Web3(window.ethereum);
-          await window.ethereum.request({ method: "eth_requestAccounts" });
-          setWeb3(web3Instance);
-          const contractAddress = "0xAdC4f8237596CaE04246b9bb8E6aFEb3E2490094";
-          const contractInstance = new web3Instance.eth.Contract(
-            Event.output.abi, 
-            contractAddress
-          );
+  // useEffect(() => {
+  //   // Función para inicializar Web3 y el contrato
+  //   const initWeb3 = async () => {
+  //     try {
+  //       // Detectar si MetaMask está instalado
+  //       if (window.ethereum) {
+  //         const web3Instance = new Web3(window.ethereum);
+  //         await window.ethereum.request({ method: "eth_requestAccounts" });
+  //         setWeb3(web3Instance);
+  //         const contractAddress = "0xAdC4f8237596CaE04246b9bb8E6aFEb3E2490094";
+  //         const contractInstance = new web3Instance.eth.Contract(
+  //           Event.output.abi, 
+  //           contractAddress
+  //         );
 
-          setContract(contractInstance);
-        } else {
-          console.error("MetaMask no está instalado");
-        }
-      } catch (error) {
-        console.error("Error al inicializar Web3:", error);
-      }
-    };
+  //         setContract(contractInstance);
+  //       } else {
+  //         console.error("MetaMask no está instalado");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error al inicializar Web3:", error);
+  //     }
+  //   };
 
-    initWeb3();
-  }, []);
+  //   initWeb3();
+  // }, []);
 
-  useEffect(() => {
-    // Función para cargar las conferencias desde el contrato
-    const loadConferences = async () => {
-      try {
-        if (contract) {
-          const conferences = await contract.methods.getAllConferences().call();
-          setEvents(conferences);
-        }
-      } catch (error) {
-        console.error("Error al cargar conferencias:", error);
-      }
-    };
+  // useEffect(() => {
+  //   // Función para cargar las conferencias desde el contrato
+  //   const loadConferences = async () => {
+  //     try {
+  //       if (contract) {
+  //         const conferences = await contract.methods.getAllConferences().call();
+  //         setEvents(conferences);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error al cargar conferencias:", error);
+  //     }
+  //   };
 
-    loadConferences();
-  }, [contract]);
+  //   loadConferences();
+  // }, [contract]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

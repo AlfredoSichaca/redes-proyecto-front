@@ -52,7 +52,7 @@ function Authenticate() {
           await window.ethereum.request({ method: "eth_requestAccounts" });
           setWeb3(web3Instance);
 
-          const contractAddress = "0xAdC4f8237596CaE04246b9bb8E6aFEb3E2490094";
+          const contractAddress = "0x26fD98d34F86C88BA3D55A80fDc3C9334D57991E";
           const contractInstance = new web3Instance.eth.Contract(
             Event.output.abi, 
             contractAddress
